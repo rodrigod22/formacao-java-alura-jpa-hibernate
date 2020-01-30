@@ -25,7 +25,7 @@ public class TesteRelacionamento {
 		Movimentacao movimentacao = new Movimentacao();
 		movimentacao.setData(Calendar.getInstance());
 		movimentacao.setDescricao("compra eletronico");
-		movimentacao.setTipoMovimentacao(TipoMovimentacao.SAIDA);
+		movimentacao.setTipo(TipoMovimentacao.SAIDA);
 		movimentacao.setConta(conta);
 		movimentacao.setValor(new BigDecimal("1200.0"));
 		
