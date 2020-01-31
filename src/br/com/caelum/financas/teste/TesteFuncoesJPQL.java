@@ -14,33 +14,29 @@ public class TesteFuncoesJPQL {
 	public static void main(String[] args) {
 		
 		EntityManager em = new JPAUtil().getEntityManager();
-		em.getTransaction().begin();
+		
 		
 		Conta conta = new Conta();
 		conta.setId(2);
 		
-		//funcoes: sum = soma -- avg = media 		
-//		String jpql = "select avg(m.valor) from Movimentacao m where m.conta = :pConta " +
-//				 "and m.tipo = :pTipo " +
-//				 "order by m.valor asc";
+		//namedQuery
+		TypedQuery<Double> typedQuery = em.createNamedQuery("getMediasPorDiaETipo", Double.class);
+		typedQuery.setParameter("pConta", conta);
+		typedQuery.setParameter("pTipo", TipoMovimentacao.SAIDA);
+	
+		//DAO
+		//MovimentacaoDao dao = new MovimentacaoDao(em);
+		//dao .getMediasPorDiaETipo(TipoMovimentacao.SAIDA, conta);
 		
+		List<Double> medias = typedQuery.getResultList();
 		
-		String jpql = "select avg(m.valor) from Movimentacao m where m.conta = :pConta " +
-				 "and m.tipo = :pTipo " 
-				+"group by day(m.data), month(m.data), year(m.data)";
+		for (Double media : medias) {
+			System.out.println("media = " + media);
+		}
 		
-		TypedQuery<Double> query = em.createQuery(jpql, Double.class);
-		
-		//comparando as contas como objeto passando a conta como parametro na requisicao 
-		query.setParameter("pConta", conta);
-		query.setParameter("pTipo", TipoMovimentacao.SAIDA);
-		List<Double> medias = (List<Double>) query.getResultList();
-		em.getTransaction().commit();
-		em.close();
-		
-		System.out.println("media dia 30 = " + medias.get(0));
-		System.out.println("media dia 31 = " + medias.get(1));
-
 	}
 
 }
+
+
+
